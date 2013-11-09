@@ -1,5 +1,11 @@
 package Configuration;
 
 public abstract class Configuration {
- String ab;
+	
+	private int ConfId;
+	public Configuration() {}
+	
+	public int GetConfId() {
+		return this.ConfId;
+	}
 }
