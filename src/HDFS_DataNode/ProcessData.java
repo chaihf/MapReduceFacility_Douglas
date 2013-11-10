@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -39,10 +42,10 @@ public class ProcessData extends UnicastRemoteObject implements ProcessDataInter
 	}
 	
 	@SuppressWarnings("resource")
-	public byte[] GetSplittedFile(String filename){
+	public void TransferSplittedFile(String filename, String datanodename){
 		File file = new File(filename);
 		if (!file.exists())
-			return null;
+			System.out.println("No such file!");
 		byte[] filecontent = new byte[(int) file.length()];
 		try {
 			FileInputStream fis = new FileInputStream(file);
@@ -52,6 +55,19 @@ public class ProcessData extends UnicastRemoteObject implements ProcessDataInter
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return filecontent;
+		
+		try {
+			ProcessDataInterface pd = (ProcessDataInterface) Naming.lookup("rmi://"+datanodename+"/pd");
+			pd.PlaceSplittedFile(filename, filecontent);
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
