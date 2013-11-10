@@ -1,6 +1,6 @@
-package HDFS_NameNode;
+package ManagementTool;
 
 public class PlaceFileStrategy {
-	public PlaceFileStrategy() {}
 	public PlaceFileStrategy(int factor) {}
+	public PlaceFileStrategy() {}
 }

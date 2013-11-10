@@ -70,4 +70,8 @@ public class ProcessData extends UnicastRemoteObject implements ProcessDataInter
 			e.printStackTrace();
 		}
 	}
+	
+	public DataNodeMeta SendHeartBeat(){
+		return this.getMeta();
+	}
 }

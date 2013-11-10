@@ -45,6 +45,8 @@ public class DataNode {
 			
 		ProcessData pd = new ProcessData(datanodemeta);
 		Naming.rebind("rmi://"+hostname+"/ProcessData", pd);
+		HeartBeat hb = new HeartBeat(datanodemeta);
+		Naming.rebind("rmi://"+hostname+"/HeartBeat", hb);
 		
 		//DataNode thenode = new DataNode(datanodemeta);
 		
