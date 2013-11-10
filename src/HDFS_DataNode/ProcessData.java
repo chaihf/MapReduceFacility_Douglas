@@ -29,12 +29,15 @@ public class ProcessData extends UnicastRemoteObject implements ProcessDataInter
 	public void PlaceSplittedFile(String filename, byte[] filecontent){
 		File newfile = new File(filename);
 		try {
-			if (!newfile.exists())
+			if (!newfile.exists()){
 				newfile.createNewFile();
-			FileOutputStream fos = new FileOutputStream(newfile);
-			BufferedOutputStream bos = new BufferedOutputStream(fos);
-			bos.write(filecontent);
-			this._meta.getblockmeta.add(filename);
+				FileOutputStream fos = new FileOutputStream(newfile);
+				BufferedOutputStream bos = new BufferedOutputStream(fos);
+				bos.write(filecontent);
+				this._meta.getFBMeta().getDnbt().add(filename);
+			}
+			else
+				System.out.println("File already exist!");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

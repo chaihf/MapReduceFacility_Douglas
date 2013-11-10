@@ -2,11 +2,17 @@ package HDFS_DataNode;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import MetaData.DataNodeMeta;
 import MetaData.FileBlockMeta;
+import Util.DataNodeBlockTable;
 
 public class DataNode {
 	private DataNodeMeta _datanodemeta;
@@ -24,7 +30,7 @@ public class DataNode {
 		this._datanodemeta = datanodemeta;
 	}
 	
-	public static void main(String args[]){
+	public static void main(String args[]) throws UnknownHostException, RemoteException, MalformedURLException{
 		Properties properties = new Properties();
 		try {
 			properties.load(DataNode.class.getResourceAsStream("../config.properties"));
@@ -38,18 +44,17 @@ public class DataNode {
 		
 		
 		/* initialization */
+		ArrayList<String> filelist = new ArrayList<String>();
 		String hostname = InetAddress.getLocalHost().getHostName();
-		Table table = new Table();
+		DataNodeBlockTable table = new DataNodeBlockTable(filelist);
 		FileBlockMeta fileblockmeta = new FileBlockMeta(table);
 		DataNodeMeta datanodemeta = new DataNodeMeta(hostname, fileblockmeta);
 			
 		ProcessData pd = new ProcessData(datanodemeta);
 		Naming.rebind("rmi://"+hostname+"/ProcessData", pd);
-		HeartBeat hb = new HeartBeat(datanodemeta);
-		Naming.rebind("rmi://"+hostname+"/HeartBeat", hb);
 		
 		//DataNode thenode = new DataNode(datanodemeta);
-		
+	
 		//TransferData td = new TransferData();
 		//HeartBeat hb = new HeartBeat(datanodemeta);
 		//Naming.rebind("rmi://"+hostname+"/TransferData", td);
