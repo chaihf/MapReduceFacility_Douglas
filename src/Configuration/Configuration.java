@@ -8,4 +8,6 @@ public abstract class Configuration {
 	public int GetConfId() {
 		return this.ConfId;
 	}
+	
+	
 }

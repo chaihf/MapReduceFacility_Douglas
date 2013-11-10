@@ -45,7 +45,7 @@ public class ManagementTool {
 	}
 	
 	
-	public void ConsoleHandler() throws IOException  {
+	public void ConsoleHandler() throws IOException, NotBoundException  {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		String input;
 		System.out.println("Management Tool starts up:");
@@ -63,7 +63,7 @@ public class ManagementTool {
 	}
 	
 	
-	public void PutFileIntoHDFS(String input) {
+	public void PutFileIntoHDFS(String input) throws IOException, NotBoundException {
 		PlaceFileStrategy pfs = new PlaceFileStrategy(this.REPLICATION_FACTOR);
 		
 		
@@ -74,6 +74,8 @@ public class ManagementTool {
 			ProcessDataInterface pdi = (ProcessDataInterface) Naming.lookup(dnrmi.get(i));
 			this.DATANODE_STUB.add(pdi);
 		}
+		
+		int dataNodeNum = this.DATANODE_STUB.size();
 		
 		
 		//Split file according to the block size and replicated factor
@@ -86,21 +88,11 @@ public class ManagementTool {
         int sizeOfFiles = this.BLOCKSIZE;// Size of Each Block
         byte[] buffer = new byte[sizeOfFiles];
         int tmp = 0;
-        while ((tmp = bis.read(buffer)) > 0) {
-        	
-//            File newFile=new File(f.getParent()+"\\"+name+"."+String.format("%03d", partCounter++));
-//            File n = new File();
-//            newFile.createNewFile();
-//            out = new FileOutputStream(newFile);
-//            out.write(buffer,0,tmp);
-//            out.close();
-        	this.DATANODE_STUB.get(index).
-        }
-		
-		for(int j )
-		
-		
-		
+        while ((tmp = bis.read(buffer)) > 0) {        	
+        	int ran = (int) (Math.random()*dataNodeNum);
+        	this.DATANODE_STUB.get(ran%dataNodeNum).PlaceSplittedFile(name+String.format("%03d", partCounter++), buffer);
+        	this.DATANODE_STUB.get((ran+1)%dataNodeNum).PlaceSplittedFile(name+String.format("%03d", partCounter++), buffer);
+        }		
 	}
 	
 	public void ListFile() {
@@ -112,7 +104,7 @@ public class ManagementTool {
     }
 
 	
-	public static void main(String[] arg) throws InterruptedException, IOException {
+	public static void main(String[] arg) throws InterruptedException, IOException, NotBoundException {
 		if(arg == null || arg.length != 3) {
 			System.err.println("Usage: ProcessManagerServer hostname port");
 		}
