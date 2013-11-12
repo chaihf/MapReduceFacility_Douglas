@@ -1,5 +1,5 @@
 package MetaData;
-
+import Util.*;
 /*
  * Datanode Metadata: 
  * 	datanode hostname, fileblock meta
@@ -8,15 +8,15 @@ package MetaData;
 public class DataNodeMeta {
 	public DataNodeMeta(){}
 	
-	private String _hostname;
-	private FileBlockMeta _fbmeta;
+	private String _hostname;	
+	private DataNodeBlockTable _table;
 	
-	public DataNodeMeta(String host, FileBlockMeta meta){
+	public DataNodeMeta(String host){
 		this.setHostname(host);
-		this.setFBMeta(meta);
+		this._table = new DataNodeBlockTable();
 	}
 
-	public String getHhostname() {
+	public String getHostname() {
 		return _hostname;
 	}
 
@@ -24,11 +24,9 @@ public class DataNodeMeta {
 		this._hostname = _hostname;
 	}
 
-	public FileBlockMeta getFBMeta() {
-		return _fbmeta;
+	public DataNodeBlockTable getDataNodeBlockTable() {
+		return this._table;
 	}
 
-	public void setFBMeta(FileBlockMeta _fbmeta) {
-		this._fbmeta = _fbmeta;
-	}
+
 }
